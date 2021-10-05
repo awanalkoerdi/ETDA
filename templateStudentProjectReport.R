@@ -2,24 +2,41 @@
 ### PROJECT OF:   Rutger Kemperman & Awan Al Koerdi
 
 ###############################################################
-### TITLE:   <informative title of your project (max 80 chars)>
+### TITLE:   Daphnia magna population modelling
 
 ###############################################################
 ### SHORT INTRODUCTION: <between 100 and 200 words: Introduce the ecological process and/or problem that will logically lead to your research question.>
 
 ###############################################################
-### RESEARCH QUESTION: How are the dynamics of D. magna populations affected by temperature and genetic background and how do these correlate to the vital rates.
+### RESEARCH QUESTION:
+# How are the vital rates in D. magna populations negatively affected by increased water temperature?
 
 ###############################################################
-### HYPOTHESES AND EXPECTATIONS: 
-#H0 There is no difference
-#Ha A1-A4 show similarity in relation to the vital rates, whereas L does less, due to differences in ponds.
+### HYPOTHESES AND EXPECTATIONS:
+# H0: There is no difference in the vital rates of Daphnia magna populations A1-A4 and L as effect of increased water temperature.
+# Ha: Vital rates of Daphnia magna populations A1-A4 and L are negatively affected by increased water temperature.
 
 ###############################################################
 ### METHODS: STUDY SYSTEM: <between 50 and 200 words: Describe the ecosystem/species.>
 
+
+# Description of the dataset: The Daphnia magna dataset consists of 4 response variables (temp, size, gen, and n), 1 random variable (day, which is the date of each measurement), and 5 explanatory variables (surv, growth, eggs, offspring, and size.offspring).
+# This dataset was compiled of observation data obtained from measuring several effects and constants in the study system of the Daphnia.
+# The study was conducted under controlled circumstances in a simulated environment that matches real ponds. This means the experiment took place in a climate chamber with a set 16:8 hour light-dark regime and a set environmental temperature. Water temperature varied between 10 and 26 degrees Celsius by a created gradient, using a continuous overflow of demineralized water which kept the temperature gradient in place.
+
+
+
+
+
 ###############################################################
 ### METHODS: DATA ACQUISITION: <between 100 and 200 words: Describe how the data were collected.>
+# The dataset was obtained from Eelke Jongejans and was primarily collected for another research targeting population level responses to temperature, density, and clonal differences in Daphnia.
+# Dormant Daphnia magna eggs were collected from a small lake in Hilversum, and stored dark at 4 degrees Celsius.
+# From 50 eggs 22 lineages were established, leading to 12 surviving populations. 4 of these clonal lineages were chosen randomly for research and observation, and 1 additional laboratory grown lineage was observed as well. These populations are A1 to A4, and population L.
+# Individual measurements took place, performed with metrics as follows: three individuals × five clones × eight temperatures × twice a week × 11 weeks of measuring. Since some populations died off this resulted in 2293 individual observations.
+# Vital rates were researched; population size and density, growth, survival, and reproduction were measured.
+# Date, environment, and lineage were recorded at each observation.
+
 
 ###############################################################
 ### METHODS: ANALYSES: <include R code of data exploration and manipulation>
@@ -32,17 +49,19 @@ data$gen<-as.factor(data$gen)
 data$temp<-as.numeric(data$temp)
 data$gen<-as.numeric(data$gen)
 
+#Data transformation
 data$temp_stand<-(data$temp*4.86)+18.6
 data$size_stand<-(data$size*0.67)+2.09
 data$n_stand<-(data$n*75)+96
 summary(data)
 
-subset_A1<-subset(data,gen=="A1")
-subset_A2<-subset(data,gen=="A2")
-subset_A3<-subset(data,gen=="A3")
-subset_A4<-subset(data,gen=="A4")
-subset_L<-subset(data,gen=="L")
+subset_A1<-subset(data,gen=="1")
+subset_A2<-subset(data,gen=="2")
+subset_A3<-subset(data,gen=="3")
+subset_A4<-subset(data,gen=="4")
+subset_L<-subset(data,gen=="5")
 
+#Data exploration
 hist(data$size_stand,col="grey",main="");mtext(side=3,line=-5,'size_stand',cex=2)
 hist(data$n_stand,col="grey",main="");mtext(side=3,line=-5,'n',cex=2)
 hist(data$diff,col="grey",main="");mtext(side=3,line=-5,'diff',cex=2)
@@ -89,23 +108,18 @@ pairs(data[,c('day','temp','gen','size','n','diff','surv', 'growth')],
       diag.panel=panel.hist)
 
 
-lme(biomass~ownForeign*species,data=rootBiomass2,random=~1|block/potNumber,na.action="na.omit")
-
-# 
-# summary(subset_A1)
-# plot(subset_A1$temp,subset_A1$size, xlab = subset_A1$temp_stand, ylab = subset_A1$size_temp)
-# m1<-lm(subset_A1$temp~subset_A1$size)
-# abline(m1)
-# 
-# plot(data$temp,data$size)
-# m2<-lm(data$temp~data$size)
-# abline(m2)
-
-
-#lme(biomass~ownForeign*species,data=rootBiomass2,random=~1|block/potNumber,na.action="na.omit")
-
 ###############################################################
 ### RESULTS: <describe your results (calculations, tables and/or graphs) between the R code needed to show these results.>
+
+
+
+summary(subset_A1)
+plot(subset_A1$temp,subset_A1$growth)
+
+m1<-lm(subset_A1$temp~subset_A1$growth)
+abline(m1)
+
+#m2<-lme(temp~ownForeign*species,data=rootBiomass2,random=~1|block/potNumber,na.action="na.omit")
 
 ###############################################################
 ### DISCUSSION: <between 150 and 300 words>
