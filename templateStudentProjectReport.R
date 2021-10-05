@@ -15,7 +15,6 @@
 #H0 There is no difference
 #Ha A1-A4 show similarity in relation to the vital rates, whereas L does less, due to differences in ponds.
 
-
 ###############################################################
 ### METHODS: STUDY SYSTEM: <between 50 and 200 words: Describe the ecosystem/species.>
 
@@ -31,9 +30,11 @@ data <- read.csv("Raw_data/data.csv", na.strings=c("", NA), header=T)
 summary(data)
 data$gen<-as.factor(data$gen)
 data$temp<-as.numeric(data$temp)
-data2<-data
-data2$growth<-data2$growth+(mean(data2$growth, na.rm = FALSE))
-mean(data2$growth)
+data_realval<-data
+data_realval$temp<-(data_realval$temp*4.86)+18.6
+
+
+
 par(mar=c(2,2,0,0),las=1)
 layout(matrix(c(1,1,2,3,4,5,6,7),4,2,byrow=TRUE))
 hist(data$size,col="grey",main="");mtext(side=3,line=-5,'size',cex=2)
