@@ -62,10 +62,12 @@ subset_A4<-subset(data,gen=="4")
 subset_L<-subset(data,gen=="5")
 
 #Data exploration
+# par(mar=c(2,2,0,0),las=1)
+# layout(matrix(c(1,1,2,3,4,5,6,7),4,2,byrow=TRUE))
 hist(data$size_stand,col="grey",main="");mtext(side=3,line=-5,'size_stand',cex=2)
 hist(data$n_stand,col="grey",main="");mtext(side=3,line=-5,'n',cex=2)
 hist(data$diff,col="grey",main="");mtext(side=3,line=-5,'diff',cex=2)
-hist(data$surv,col="grey",main="");mtext(side=3,line=-5,'surv',cex=2)
+hist(data$surv,col="grey",main="", breaks = 2);mtext(side=3,line=-5,'surv',cex=2)
 hist(data$growth,col="grey",main="");mtext(side=3,line=-5,'growth',cex=2)
 hist(data$temp_stand,col="grey",main="");mtext(side=3,line=-5,'temp_stand',cex=2)
 hist(data$day,col="grey",main="");mtext(side=3,line=-5,'day',cex=2)
@@ -119,7 +121,12 @@ plot(subset_A1$temp,subset_A1$growth)
 m1<-lm(subset_A1$temp~subset_A1$growth)
 abline(m1)
 
-#m2<-lme(temp~ownForeign*species,data=rootBiomass2,random=~1|block/potNumber,na.action="na.omit")
+
+m2<-lme(growth~temp*gen,data=data,random=~1|day,na.action="na.omit")
+plot(m2)
+m3<-lme(size_stand~temp*gen,data=data,random=~1|day,na.action="na.omit")
+plot(m3)
+#m2<-lme(biomass~ownForeign*species,data=rootBiomass2,random=~1|day,na.action="na.omit")
 
 ###############################################################
 ### DISCUSSION: <between 150 and 300 words>
