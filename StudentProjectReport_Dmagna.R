@@ -50,7 +50,6 @@ data$gen<-as.factor(data$gen)
 data$temp<-as.numeric(data$temp)
 data$gen<-as.numeric(data$gen) #transform to numeric values A1 becomes 1 etc. 
 
-
 #Data transformation
 data$temp_stand<-(data$temp*4.86)+18.6
 data$size_stand<-(data$size*0.67)+2.09
@@ -113,23 +112,40 @@ pairs(data[,c('day','temp','gen','size','n','diff','surv', 'growth')],
       diag.panel=panel.hist)
 
 
+# require(cluster)
+# data1<-na.omit(data[1:6])
+# pca1<-prcomp(data1,scale=T)
+# autoplot(pca1,data = data1, colour = 'gen', loadings=T, loadings.label=T,frame=T)
+
+#data_daphnia<-na.omit(subset_A2[1:9])
+m1<-lm(size~temp,data=subset_A2)
+abline(m1)
+plot(m1)
+
 ###############################################################
 ### RESULTS: <describe your results (calculations, tables and/or graphs) between the R code needed to show these results.>
 
-require(nlme)
-summary(subset_A1)
-plot(subset_A1$temp,subset_A1$growth)
+# require(nlme)
+# summary(subset_A1)
+# plot(subset_A1$temp,subset_A1$growth)
+# plot(lm(growth~n,data=data))
+# m1<-lm(data$temp~subset_A1$growth)
+# abline(m1)
+# m2<-lme(growth~temp*gen,data=data,random=~1|day,na.action="na.omit")
+# plot(m2)
+# m22<-lme(growth~temp,data=data,random=~1|day,na.action="na.omit")
+# plot(m22)
+# m3<-lme(size_stand~temp*gen,data=data,random=~1|day,na.action="na.omit")
+# plot(m3)
+# m4<-lme(size_stand~gen,data=data,random=~1|day,na.action="na.omit")
+# plot(m4)
+# y <- cbind(data$size,data$n)
+# k0 <- manova(y ~ gen+temp,data=data)
+# summary(k0)
+# summary.aov(k0)
 
-m1<-lm(subset_A1$temp~subset_A1$growth)
-abline(m1)
+m1<-
 
-
-m2<-lme(growth~temp*gen,data=data,random=~1|day,na.action="na.omit")
-plot(m2)
-m3<-lme(size_stand~temp*gen,data=data,random=~1|day,na.action="na.omit")
-plot(m3)
-m4<-lme(size_stand~gen,data=data,random=~1|day,na.action="na.omit")
-plot(m4)
 
 
 ###############################################################
