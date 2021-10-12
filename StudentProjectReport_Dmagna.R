@@ -144,6 +144,16 @@ require(nlme)
 # summary.aov(k0)
 
 #par(mfrow=c(2,2))
+
+boxplot(temp_stand~surv,
+        data=subset_A2,
+        main="Survival rate temp",
+        xlab="surv",
+        ylab="temp",
+        col="lightblue",
+        border="black"
+)
+
 m1<-lm(size~temp,data=subset_A2)
 abline(m1)
 plot(m1)
@@ -172,10 +182,15 @@ m7<-lme(growth~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m7)
 res1 <- resid(m7, type = "pearson") # Extract standardized residuals
 res1
-subset_A2[which(abs(res1) > 5.0),] # Get the rows which absolute residuals > 2.5
+subset_A2[which(abs(res1) > 5.0),] # Get the rows which absolute residuals
+#plot without outliers??
+
 
 m8<-lme(surv~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m8)
+
+#multivariate model
+
 
 
 ###############################################################
