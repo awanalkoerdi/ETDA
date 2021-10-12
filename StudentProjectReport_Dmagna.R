@@ -191,14 +191,12 @@ plot(m6)
 subset_A2_na<-subset_A2
 subset_A2_na<-subset_A2_na[!is.na(subset_A2_na$growth), ]
 
-
 m7<-lme(growth~temp, data=subset_A2_na,random=~1|day,na.action="na.omit")
 plot(m7)
 res1 <- resid(m7, type = "pearson") # Extract standardized residuals
 subset_A2_na$resid<-res1
 subset_A2_na[which(abs(res1) > 5.0),] # Get the rows which absolute residuals
 #plot without outliers??
-
 
 m8<-lme(surv~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m8)
@@ -220,5 +218,4 @@ plot(m8)
 # McNoleg O (1996) The integration of GIS, remote sensing, expert systems and adaptive co-kriging for environmental habitat modeling of the Highland Haggis using object-oriented, fuzzy-logic and neural-network techniques. Comput Geosci 22:585-588
 
 # Meyer-Rochow VB, Gal J (2003) Pressures produced when penguins pooh - calculations on avian defaecation. Polar Biol 27:56-58
-
 # Sheldon RW, Kerr SR (1972) The population density of monsters in Loch Ness. Limnol Oceanogr 17:796-798
