@@ -76,6 +76,16 @@ hist(data$day,col="grey",main="");mtext(side=3,line=-5,'day',cex=2)
 hist(data$gen,col="grey",main="");mtext(side=3,line=-5,'gen',cex=2)
 hist(data$eggs,col="grey",main="");mtext(side=3,line=-5,'eggs',cex=2)
 
+#histograms for subset A2
+hist(subset_A2$size_stand,col="grey",main="");mtext(side=3,line=-5,'size_stand',cex=2)
+hist(subset_A2$n_stand,col="grey",main="");mtext(side=3,line=-5,'n',cex=2)
+hist(subset_A2$diff,col="grey",main="");mtext(side=3,line=-5,'diff',cex=2)
+hist(subset_A2$surv,col="grey",main="", breaks = 2);mtext(side=3,line=-5,'surv',cex=2)
+hist(subset_A2$growth,col="grey",main="");mtext(side=3,line=-5,'growth',cex=2)
+hist(subset_A2$temp_stand,col="grey",main="");mtext(side=3,line=-5,'temp_stand',cex=2)
+hist(subset_A2$day,col="grey",main="");mtext(side=3,line=-5,'day',cex=2)
+hist(subset_A2$eggs,col="grey",main="");mtext(side=3,line=-5,'eggs',cex=2)
+
 panel.smooth2 <- function (x, y, col = par("col"), bg = NA, pch = par("pch"), 
                            cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...) {
   points(x, y, pch = pch, col = col, bg = bg, cex = cex)
@@ -178,11 +188,15 @@ plot(m5)
 m6<-lme(n~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m6)
 
-m7<-lme(growth~temp, data=subset_A2,random=~1|day,na.action="na.omit")
+subset_A2_na<-subset_A2
+subset_A2_na<-subset_A2_na[!is.na(subset_A2_na$growth), ]
+
+
+m7<-lme(growth~temp, data=subset_A2_na,random=~1|day,na.action="na.omit")
 plot(m7)
 res1 <- resid(m7, type = "pearson") # Extract standardized residuals
-res1
-subset_A2[which(abs(res1) > 5.0),] # Get the rows which absolute residuals
+subset_A2_na$resid<-res1
+subset_A2_na[which(abs(res1) > 5.0),] # Get the rows which absolute residuals
 #plot without outliers??
 
 
@@ -190,7 +204,6 @@ m8<-lme(surv~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m8)
 
 #multivariate model
-
 
 
 ###############################################################
