@@ -94,7 +94,6 @@ boxplot(temp_norm~surv,
 #m1 plots the mean size of a population against the temperatures. We observed that higher temperatures lead to bigger extremes in body size; meaning both larger and smaller bodied Daphnia. In general, at average temperatures Daphnia tend to show less dispersion in body size. The Q-Q plot shows that it is improbable however that the size of Daphnia correlates to the temperature.
 #m2 plots the population density (n) against the temperature. Here we observed less linearity in the data. The data is more dispersed, although the Q-Q plot shows that the data is not normally distributed. However, significance can be found in this, thus we decided not to throw out any observations.
 
-
 par(mfrow=c(2,2))
 m1<-lm(size~temp,data=subset_A2)
 abline(m1)
@@ -106,11 +105,10 @@ abline(m2)
 plot(m2)
 summary(m2)
 
-#To look into further detail at the distribution of the residuals we performed a shapiro test. The p-value
+#To look into further detail at the distribution of the residuals we performed a shapiro test. The p-value here was very low, which approves the H0 hypothesis. 
 plot(subset_A2$n)
 resn <- resid(m2, type = "pearson")
 shapiro.test(resn)
-
 
 #m3 plots the the growth against the temperature.It is shown that the data is well dispersed. The increased temperature does not seem to have an effect on the growth of Daphnia. The Q-Q plot shows a better probability here, meaning that it is possible that the growth correlates to the temperature. The Cook's distance shows that even the outliers are not incredibly far off. 
 m3<-lm(growth~temp,data=subset_A2)
@@ -118,23 +116,28 @@ abline(m3)
 plot(m3)
 summary(m3)
 
+#Because we wanted to include our random variable, day, we made lme's per response variable against the temperature. 
+#m4: The data looks well distributed. The summary shows a negative coefficient which means the temperature has a negative effect on the size. Because the p-value is 0.0002 the significance is high and the H0 is rejected.
+#m5 where population density (n) is modeled against the temperature. The visualization shows that the data is well distributed. The high p-value points to H0 being true, thus no effect on population density can be assumed from this data. Although, a positive effect found is that the population density increases slightly as temperature is increased. However the population size is unknown, it is unclear what effect it has.
+#m6 shows that the data again is distributed well. The summary shows a very high p-value which approves the H0. Over time the Daphnia tend to grow, even as temperature is increased. Thus no negative effect of temperature on the growth of Daphnia can be observed. Because this plot clearly show outliers, we looked into detail at these outliers. No particular observations could be made so it was decided to include those two observations. 
+
 require(nlme)
 m4<-lme(size~temp,data=subset_A2,random=~1|day,na.action="na.omit")
+plot(m4)
+summary(m4)
+
+m5<-lme(n~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m5)
 summary(m5)
 
-m5<-lme(n~temp, data=subset_A2,random=~1|day,na.action="na.omit")
+m6<-lme(growth~temp, data=subset_A2,random=~1|day,na.action="na.omit")
 plot(m6)
 summary(m6)
-
-
-m6<-lme(growth~temp, data=subset_A2,random=~1|day,na.action="na.omit")
-plot(m7)
-summary(m7)
-res1 <- resid(m7, type = "pearson") # Extract standardized residuals
+res1 <- resid(m6, type = "pearson") # Extract standardized residuals
 res1
-subset_A2[which(abs(res1) > 5.0),] # Get the rows which absolute residuals
+subset_A2[which(abs(res1) > 5.0),] # Get the rows of the residuals with a value above 0.5.
 
+#To get a comprehensive look on the data, an lme was used with interesting data like the temperature as the fixed factor, growth and n as explanatory and size as the response variable since the previous lme showed the most correlation between size and temperature. The population density made the model less distributed, so we decided to throw that out and make a new model with only the growth and temperature. Noticeable are the 0 p-values. 
 
 all<-lme(size~temp+growth+n,
          data=subset_A2,
