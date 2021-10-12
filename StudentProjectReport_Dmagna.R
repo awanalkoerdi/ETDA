@@ -118,14 +118,13 @@ pairs(data[,c('day','temp','gen','size','n','diff','surv', 'growth')],
 # autoplot(pca1,data = data1, colour = 'gen', loadings=T, loadings.label=T,frame=T)
 
 #data_daphnia<-na.omit(subset_A2[1:9])
-m1<-lm(size~temp,data=subset_A2)
-abline(m1)
-plot(m1)
+
+
 
 ###############################################################
 ### RESULTS: <describe your results (calculations, tables and/or graphs) between the R code needed to show these results.>
 
-# require(nlme)
+require(nlme)
 # summary(subset_A1)
 # plot(subset_A1$temp,subset_A1$growth)
 # plot(lm(growth~n,data=data))
@@ -144,8 +143,39 @@ plot(m1)
 # summary(k0)
 # summary.aov(k0)
 
-m1<-
+#par(mfrow=c(2,2))
+m1<-lm(size~temp,data=subset_A2)
+abline(m1)
+plot(m1)
 
+m2<-lm(n~temp, data=subset_A2)
+abline(m2)
+plot(m2)
+
+m3<-lm(growth~temp,data=subset_A2)
+abline(m3)
+plot(m3)
+
+m4<-lm(surv~temp,data=subset_A2)
+abline(m4)
+plot(m4)
+
+#lme's maken
+
+m5<-lme(size~temp,data=subset_A2,random=~1|day,na.action="na.omit")
+plot(m5)
+
+m6<-lme(n~temp, data=subset_A2,random=~1|day,na.action="na.omit")
+plot(m6)
+
+m7<-lme(growth~temp, data=subset_A2,random=~1|day,na.action="na.omit")
+plot(m7)
+res1 <- resid(m7, type = "pearson") # Extract standardized residuals
+res1
+subset_A2[which(abs(res1) > 5.0),] # Get the rows which absolute residuals > 2.5
+
+m8<-lme(surv~temp, data=subset_A2,random=~1|day,na.action="na.omit")
+plot(m8)
 
 
 ###############################################################
